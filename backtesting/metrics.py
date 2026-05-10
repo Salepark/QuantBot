@@ -32,7 +32,7 @@ def sharpe_ratio(
     excess_returns = returns - daily_rf
 
     std = np.std(excess_returns, ddof=1)
-    if std == 0.0:
+    if std < 1e-8 or not np.isfinite(std):
         return 0.0
 
     return float(np.mean(excess_returns) / std * np.sqrt(periods_per_year))
@@ -67,7 +67,7 @@ def sortino_ratio(
         return float("inf")  # No losing days → infinite Sortino
 
     downside_std = np.std(downside, ddof=1)
-    if downside_std == 0.0:
+    if downside_std < 1e-8 or not np.isfinite(downside_std):
         return 0.0
 
     return float(np.mean(excess_returns) / downside_std * np.sqrt(periods_per_year))
